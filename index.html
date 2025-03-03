@@ -169,6 +169,19 @@
         const totalExpenseElement = document.getElementById('total-expense');
         const balanceElement = document.getElementById('balance');
         
+        // Função para salvar transações no localStorage
+        function saveTransactions() {
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+        }
+        
+        // Função para carregar transações do localStorage
+        function loadTransactions() {
+            const savedTransactions = localStorage.getItem('transactions');
+            if (savedTransactions) {
+                transactions = JSON.parse(savedTransactions);
+            }
+        }
+        
         // Adicionar uma nova transação
         form.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -192,6 +205,9 @@
             
             // Adicionar ao array
             transactions.push(transaction);
+            
+            // Salvar no localStorage
+            saveTransactions();
             
             // Atualizar a interface
             updateUI();
@@ -267,8 +283,16 @@
         // Função para remover uma transação
         function removeTransaction(id) {
             transactions = transactions.filter(transaction => transaction.id !== id);
+            
+            // Salvar no localStorage após remover
+            saveTransactions();
+            
+            // Atualizar a interface
             updateUI();
         }
+        
+        // Carregar transações ao iniciar a página
+        loadTransactions();
         
         // Inicializar a interface
         updateUI();
